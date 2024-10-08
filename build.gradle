@@ -5,7 +5,7 @@ plugins {
 subprojects {
     apply plugin: 'java'
 
-    group = 'tech.silantev.ddd.microarch'
+    group = 'tech.silantev.course.ddd.microarch'
     version = '0.0.0-SNAPSHOT'
 
     repositories {
