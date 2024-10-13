@@ -3,7 +3,11 @@ package tech.silantev.course.ddd.microarch.domain.sharedkernel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import tech.silantev.course.ddd.microarch.structure.Result;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class LocationTests {
 
     @ParameterizedTest
-    @CsvSource({"0, 0", "-100, 2"})
+    @MethodSource("invalidCoordinatesLessThanMinimum")
     public void coordinatesLessThanMinimumShouldThrowException(int x, int y) {
         // given x and y
         // when
@@ -23,7 +27,7 @@ class LocationTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"11, 11", "5, 100"})
+    @MethodSource("invalidCoordinatesMoreThanMaximum")
     public void coordinatesMoreThanMaximumShouldThrowException(int x, int y) {
         // given x and y
         // when
@@ -33,7 +37,7 @@ class LocationTests {
     }
 
     @ParameterizedTest
-    @CsvSource({"7, 4"})
+    @MethodSource("validCoordinates")
     public void locationsAreEqualIfCoordinatesEqual(int x, int y) {
         // given
         var locationA = new Location(x, y);
@@ -56,11 +60,43 @@ class LocationTests {
     }
 
     @Test
-    public void checkRandomCoordinatesLocation() {
+    public void checkRandomCoordinatesLocationCreation() {
         // given method for random location creation
         // when
-        var location = Location.random();
+        Location location = Location.createRandom();
         // then
         assertNotNull(location);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validCoordinates")
+    public void creationMethodShouldReturnSuccessIfValidCoordinatesUsed(int x, int y) {
+        // given invalid coordinates x and y
+        // when
+        Result<Location> result = Location.create(x, y);
+        // then
+        assertTrue(result.success());
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidCoordinatesLessThanMinimum")
+    public void creationMethodShouldReturnFailureIfInvalidCoordinatesUsed(int x, int y) {
+        // given invalid coordinates x and y
+        // when
+        Result<Location> result = Location.create(x, y);
+        // then
+        assertTrue(result.failure());
+    }
+
+    public static Stream<Arguments> invalidCoordinatesLessThanMinimum() {
+        return Stream.of(Arguments.of(0, 0), Arguments.of(-100, 2));
+    }
+
+    public static Stream<Arguments> invalidCoordinatesMoreThanMaximum() {
+        return Stream.of(Arguments.of(11, 11), Arguments.of(5, 100));
+    }
+
+    public static Stream<Arguments> validCoordinates() {
+        return Stream.of(Arguments.of(7, 4), Arguments.of(2, 3));
     }
 }

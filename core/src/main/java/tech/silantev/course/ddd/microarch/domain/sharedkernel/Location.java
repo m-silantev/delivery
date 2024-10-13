@@ -1,5 +1,7 @@
 package tech.silantev.course.ddd.microarch.domain.sharedkernel;
 
+import tech.silantev.course.ddd.microarch.structure.Result;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public record Location(int x, int y) {
@@ -18,7 +20,15 @@ public record Location(int x, int y) {
         }
     }
 
-    public static Location random() {
+    public static Result<Location> create(int x, int y) {
+        try {
+            return Result.createSuccess(new Location(x, y));
+        } catch (Exception e) {
+            return Result.createFailure(e);
+        }
+    }
+
+    public static Location createRandom() {
         int x = ThreadLocalRandom.current().nextInt(MIN_VALUE, MAX_VALUE);
         int y = ThreadLocalRandom.current().nextInt(MIN_VALUE, MAX_VALUE);
         return new Location(x, y);
