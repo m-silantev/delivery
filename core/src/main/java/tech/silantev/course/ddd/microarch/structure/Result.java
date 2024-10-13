@@ -53,7 +53,13 @@ public class Result<T> {
             return false;
         }
         Result<?> result = (Result<?>) object;
-        return Objects.equals(value, result.value) && Objects.equals(exception, result.exception);
+        if (!Objects.equals(value, result.value)) {
+            return false;
+        }
+        if (exception != null && result.exception != null) {
+            return Objects.equals(exception.getMessage(), result.exception.getMessage());
+        }
+        return Objects.equals(exception, result.exception);
     }
 
     @Override
