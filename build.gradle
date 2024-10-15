@@ -8,6 +8,12 @@ subprojects {
     group = 'tech.silantev.course.ddd.microarch'
     version = '0.0.0-SNAPSHOT'
 
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
     repositories {
         mavenCentral()
     }
