@@ -23,6 +23,12 @@ public class OrderStatus {
         return List.of(CREATED, ASSIGNED, COMPLETED);
     }
 
+    public static Result<OrderStatus, String> fromId(int id) {
+        Optional<OrderStatus> found = list().stream().filter(orderStatus -> orderStatus.id() == id).findAny();
+        return found.map(Result::<OrderStatus, String>success)
+                .orElseGet(() -> Result.error("Id " + id + " is incorrect."));
+    }
+
     public static Result<OrderStatus, String> fromName(String name) {
         Optional<OrderStatus> found = list().stream().filter(orderStatus -> orderStatus.name().equalsIgnoreCase(name)).findAny();
         return found.map(Result::<OrderStatus, String>success)
