@@ -3,6 +3,7 @@ package tech.silantev.course.ddd.microarch.domain.sharedkernel;
 
 import com.github.sviperll.result4j.Result;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Location {
@@ -47,5 +48,22 @@ public class Location {
 
     public int distanceBetween(Location another) {
         return Math.abs(x - another.x) + Math.abs(y - another.y);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        Location location = (Location) object;
+        return x == location.x && y == location.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
     }
 }
