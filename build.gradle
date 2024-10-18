@@ -8,11 +8,18 @@ subprojects {
     group = 'tech.silantev.course.ddd.microarch'
     version = '0.0.0-SNAPSHOT'
 
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
     repositories {
         mavenCentral()
     }
 
     dependencies {
+        implementation 'com.github.sviperll:result4j:1.0'
         testImplementation platform('org.junit:junit-bom:5.10.0')
         testImplementation 'org.junit.jupiter:junit-jupiter'
     }
