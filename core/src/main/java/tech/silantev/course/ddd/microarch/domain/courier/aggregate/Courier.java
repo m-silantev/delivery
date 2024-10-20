@@ -38,43 +38,42 @@ public class Courier {
         return order.getLocation().distanceBetween(location);
     }
 
-    public void moveTo(Order order) {
+    public void makeOneStepTo(Order order) {
         Location orderLocation = order.getLocation();
         Location courierLocation = location;
-        if (orderLocation.getX() != courierLocation.getX()) {
-            setLocation(moveToByX(orderLocation));
-            moveTo(order);
+        int deltaX = Math.abs(orderLocation.getX() - courierLocation.getX());
+        int deltaY = Math.abs(orderLocation.getY() - courierLocation.getY());
+        if (deltaX == 0 && deltaY == 0) {
+            return;
         }
-        if (orderLocation.getY() != courierLocation.getY()) {
-            setLocation(moveToByY(orderLocation));
-            moveTo(order);
+        if (deltaX > deltaY) {
+            moveToByX(orderLocation);
         }
+        moveToByY(orderLocation);
     }
 
-    private Location moveToByX(Location orderLocation) {
+    private void moveToByX(Location orderLocation) {
         Location courierLocation = location;
-        if (orderLocation.getX() == courierLocation.getX()) {
-            return courierLocation;
-        }
-        int step = courierLocation.getX() * transport.speed();
-        if (orderLocation.getX() > courierLocation.getX()) {
-            return Location.create(Math.min(courierLocation.getX() + step, orderLocation.getX()), orderLocation.getY());
-        }
-        // else <
-        return Location.create(Math.max(courierLocation.getX() - step, orderLocation.getX()), orderLocation.getY());
+        int newX = calculateOneStepCoordinate(orderLocation.getX(), courierLocation.getX());
+        setLocation(Location.create(newX, courierLocation.getY()));
     }
 
-    private Location moveToByY(Location orderLocation) {
+    private void moveToByY(Location orderLocation) {
         Location courierLocation = location;
-        if (orderLocation.getY() == courierLocation.getY()) {
-            return courierLocation;
+        int newY = calculateOneStepCoordinate(orderLocation.getY(), courierLocation.getY());
+        setLocation(Location.create(courierLocation.getX(), newY));
+    }
+
+    private int calculateOneStepCoordinate(int pointFrom, int pointTo) {
+        if (pointFrom == pointTo) {
+            return pointFrom;
         }
-        int step = courierLocation.getY() * transport.speed();
-        if (orderLocation.getY() > courierLocation.getY()) {
-            return Location.create(orderLocation.getX(), Math.min(courierLocation.getY() + step, orderLocation.getY()));
+        int step = pointFrom * transport.speed();
+        if (pointFrom > pointTo) {
+            return Math.max(pointFrom - step, pointTo);
         }
         // else <
-        return Location.create(orderLocation.getX(), Math.min(courierLocation.getY() - step, orderLocation.getY()));
+        return Math.min(pointFrom + step, pointTo);
     }
 
     private void setStatus(CourierStatus status) {
