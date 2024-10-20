@@ -50,6 +50,14 @@ public class Location {
         return Math.abs(x - another.x) + Math.abs(y - another.y);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) {
