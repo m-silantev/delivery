@@ -3,6 +3,7 @@ package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class Courier {
@@ -34,46 +35,70 @@ public class Courier {
         setStatus(CourierStatus.FREE);
     }
 
-    public int getDistanceToOrder(Order order) {
-        return order.getLocation().distanceBetween(location);
+    public int getDistanceTo(Order order) {
+        return getDistanceTo(order.getLocation());
+    }
+
+    public int getDistanceTo(Location location) {
+        return location.distanceBetween(location);
     }
 
     public void makeOneStepTo(Order order) {
-        Location orderLocation = order.getLocation();
+        makeOneStepTo(order.getLocation());
+    }
+
+    public void makeOneStepTo(Location orderLocation) {
         Location courierLocation = location;
         int deltaX = Math.abs(orderLocation.getX() - courierLocation.getX());
         int deltaY = Math.abs(orderLocation.getY() - courierLocation.getY());
         if (deltaX == 0 && deltaY == 0) {
             return;
         }
-        if (deltaX > deltaY) {
-            moveToByX(orderLocation);
+        if (deltaX < deltaY) {
+            moveByX(orderLocation, transport.getSpeed())
+                    .ifPresent(unusedSteps -> moveByY(orderLocation, unusedSteps));
+
+        } else {
+            moveByY(orderLocation, transport.getSpeed())
+                    .ifPresent(unusedSteps -> moveByX(orderLocation, unusedSteps));
         }
-        moveToByY(orderLocation);
     }
 
-    private void moveToByX(Location orderLocation) {
-        Location courierLocation = location;
-        int newX = calculateOneStepCoordinate(orderLocation.getX(), courierLocation.getX());
-        setLocation(Location.create(newX, courierLocation.getY()));
+    Optional<Integer> moveByX(Location to, int speed) {
+        Location from = location;
+        MoveResult moveResult = calculateOneStepWithReminder(from.getX(), to.getX(), speed);
+        setLocation(Location.create(moveResult.newPoint(), from.getY()));
+        return moveResult.unusedSteps() == 0 ? Optional.empty() : Optional.of(moveResult.unusedSteps());
     }
 
-    private void moveToByY(Location orderLocation) {
-        Location courierLocation = location;
-        int newY = calculateOneStepCoordinate(orderLocation.getY(), courierLocation.getY());
-        setLocation(Location.create(courierLocation.getX(), newY));
+    Optional<Integer> moveByY(Location to, int speed) {
+        Location from = location;
+        MoveResult moveResult = calculateOneStepWithReminder(from.getY(), to.getY(), speed);
+        setLocation(Location.create(from.getX(), moveResult.newPoint()));
+        return moveResult.unusedSteps() == 0 ? Optional.empty() : Optional.of(moveResult.unusedSteps());
     }
 
-    private int calculateOneStepCoordinate(int pointFrom, int pointTo) {
+    MoveResult calculateOneStepWithReminder(int pointFrom, int pointTo, int speed) {
         if (pointFrom == pointTo) {
-            return pointFrom;
+            return new MoveResult(pointTo, speed);
         }
-        int step = pointFrom * transport.speed();
         if (pointFrom > pointTo) {
-            return Math.max(pointFrom - step, pointTo);
+            int newPoint = pointFrom - speed;
+            if (newPoint >= pointTo) {
+                return new MoveResult(newPoint, 0);
+            }
+            return new MoveResult(pointTo, pointTo - newPoint);
         }
-        // else <
-        return Math.min(pointFrom + step, pointTo);
+        // else pointFrom < pointTo
+        int newPoint = pointFrom + speed;
+        if (newPoint <= pointTo) {
+            return new MoveResult(newPoint, 0);
+        }
+        return new MoveResult(pointTo, newPoint - pointTo);
+    }
+
+    record MoveResult(int newPoint, int unusedSteps) {
+
     }
 
     private void setStatus(CourierStatus status) {

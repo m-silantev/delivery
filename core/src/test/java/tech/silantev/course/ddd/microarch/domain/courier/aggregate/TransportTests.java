@@ -45,7 +45,7 @@ class TransportTests {
     }
 
     public static Stream<String> validTransportNames() {
-        return Transport.list().stream().map(Transport::name);
+        return Transport.list().stream().map(Transport::getName);
     }
 
     public static Stream<String> invalidTransportNames() {

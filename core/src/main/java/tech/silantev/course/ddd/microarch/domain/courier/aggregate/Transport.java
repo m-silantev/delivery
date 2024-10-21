@@ -26,26 +26,26 @@ public class Transport {
     }
 
     public static Result<Transport, String> fromId(int id) {
-        Optional<Transport> found = list().stream().filter(transport -> transport.id() == id).findAny();
+        Optional<Transport> found = list().stream().filter(transport -> transport.getId() == id).findAny();
         return found.map(Result::<Transport, String>success)
                 .orElseGet(() -> Result.error("Id " + id + " is incorrect."));
     }
 
     public static Result<Transport, String> fromName(String name) {
-        Optional<Transport> found = list().stream().filter(transport -> transport.name().equalsIgnoreCase(name)).findAny();
+        Optional<Transport> found = list().stream().filter(transport -> transport.getName().equalsIgnoreCase(name)).findAny();
         return found.map(Result::<Transport, String>success)
                 .orElseGet(() -> Result.error("Name " + name + " is incorrect."));
     }
 
-    public int id() {
+    public int getId() {
         return id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public int speed() {
+    public int getSpeed() {
         return speed;
     }
 }
