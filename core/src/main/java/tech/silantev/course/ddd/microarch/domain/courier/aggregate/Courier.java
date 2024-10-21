@@ -3,7 +3,6 @@ package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class Courier {
@@ -54,51 +53,10 @@ public class Courier {
         if (deltaX == 0 && deltaY == 0) {
             return;
         }
-        if (deltaX < deltaY) {
-            moveByX(orderLocation, transport.getSpeed())
-                    .ifPresent(unusedSteps -> moveByY(orderLocation, unusedSteps));
-
-        } else {
-            moveByY(orderLocation, transport.getSpeed())
-                    .ifPresent(unusedSteps -> moveByX(orderLocation, unusedSteps));
-        }
-    }
-
-    Optional<Integer> moveByX(Location to, int speed) {
-        Location from = location;
-        MoveResult moveResult = calculateOneStepWithReminder(from.getX(), to.getX(), speed);
-        setLocation(Location.create(moveResult.newPoint(), from.getY()));
-        return moveResult.unusedSteps() == 0 ? Optional.empty() : Optional.of(moveResult.unusedSteps());
-    }
-
-    Optional<Integer> moveByY(Location to, int speed) {
-        Location from = location;
-        MoveResult moveResult = calculateOneStepWithReminder(from.getY(), to.getY(), speed);
-        setLocation(Location.create(from.getX(), moveResult.newPoint()));
-        return moveResult.unusedSteps() == 0 ? Optional.empty() : Optional.of(moveResult.unusedSteps());
-    }
-
-    MoveResult calculateOneStepWithReminder(int pointFrom, int pointTo, int speed) {
-        if (pointFrom == pointTo) {
-            return new MoveResult(pointTo, speed);
-        }
-        if (pointFrom > pointTo) {
-            int newPoint = pointFrom - speed;
-            if (newPoint >= pointTo) {
-                return new MoveResult(newPoint, 0);
-            }
-            return new MoveResult(pointTo, pointTo - newPoint);
-        }
-        // else pointFrom < pointTo
-        int newPoint = pointFrom + speed;
-        if (newPoint <= pointTo) {
-            return new MoveResult(newPoint, 0);
-        }
-        return new MoveResult(pointTo, newPoint - pointTo);
-    }
-
-    record MoveResult(int newPoint, int unusedSteps) {
-
+        Location moved = deltaX != 0 && deltaX < deltaY
+                ? transport.movePreferablyByX(courierLocation, orderLocation)
+                : transport.movePreferablyByY(courierLocation, orderLocation);
+        setLocation(moved);
     }
 
     private void setStatus(CourierStatus status) {
