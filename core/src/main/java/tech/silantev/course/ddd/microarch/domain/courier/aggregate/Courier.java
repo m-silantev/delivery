@@ -59,8 +59,8 @@ public class Courier {
         setLocation(moved);
     }
 
-    public int calculateTimeTo(Location location) {
-        int distance = this.location.distanceBetween(location);
+    public double calculateTimeTo(Location location) {
+        double distance = this.location.distanceBetween(location);
         return distance / transport.getSpeed();
     }
 

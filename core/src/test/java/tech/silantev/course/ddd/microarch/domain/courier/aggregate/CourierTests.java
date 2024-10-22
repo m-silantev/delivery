@@ -63,7 +63,7 @@ class CourierTests {
         Transport transport = Transport.BICYCLE;
         Courier courier = Courier.create("anyString", transport, from);
         // when
-        int time = courier.calculateTimeTo(to);
+        double time = courier.calculateTimeTo(to);
         // then
         assertEquals(9, time);
     }
