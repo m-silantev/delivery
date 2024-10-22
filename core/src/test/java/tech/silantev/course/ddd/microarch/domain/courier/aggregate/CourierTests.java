@@ -54,4 +54,17 @@ class CourierTests {
         // then
         assertEquals(CourierStatus.FREE, courier.getStatus());
     }
+
+    @Test
+    public void courierOnBicycleShouldGetFromCornerToCornerForNineSteps() {
+        // given
+        Location from = Location.create(1, 1);
+        Location to = Location.create(10, 10);
+        Transport transport = Transport.BICYCLE;
+        Courier courier = Courier.create("anyString", transport, from);
+        // when
+        int time = courier.calculateTimeTo(to);
+        // then
+        assertEquals(9, time);
+    }
 }
