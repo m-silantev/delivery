@@ -1,6 +1,6 @@
 package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 
-import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
+import com.github.sviperll.result4j.Result;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.UUID;
@@ -26,24 +26,24 @@ public class Courier {
         return new Courier(id, name, transport, location, CourierStatus.FREE);
     }
 
-    public void setBusy() {
+    public Result<Courier, String> setBusy() {
+        if (status == CourierStatus.BUSY) {
+            return Result.error("Courier is already Busy");
+        }
         setStatus(CourierStatus.BUSY);
+        return Result.success(this);
     }
 
-    public void setFree() {
+    public Result<Courier, String> setFree() {
+        if (status == CourierStatus.FREE) {
+            return Result.error("Courier is already Free");
+        }
         setStatus(CourierStatus.FREE);
-    }
-
-    public int getDistanceTo(Order order) {
-        return getDistanceTo(order.getLocation());
+        return Result.success(this);
     }
 
     public int getDistanceTo(Location location) {
         return location.distanceBetween(location);
-    }
-
-    public void makeOneStepTo(Order order) {
-        makeOneStepTo(order.getLocation());
     }
 
     public void makeOneStepTo(Location orderLocation) {
@@ -54,8 +54,8 @@ public class Courier {
             return;
         }
         Location moved = deltaX != 0 && deltaX < deltaY
-                ? transport.movePreferablyByX(courierLocation, orderLocation)
-                : transport.movePreferablyByY(courierLocation, orderLocation);
+                ? transport.moveTowardPreferablyByX(courierLocation, orderLocation)
+                : transport.moveTowardPreferablyByY(courierLocation, orderLocation);
         setLocation(moved);
     }
 

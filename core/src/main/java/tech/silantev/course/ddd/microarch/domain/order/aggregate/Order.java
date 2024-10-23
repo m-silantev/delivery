@@ -1,5 +1,6 @@
 package tech.silantev.course.ddd.microarch.domain.order.aggregate;
 
+import com.github.sviperll.result4j.Result;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
@@ -28,10 +29,12 @@ public class Order {
         setStatus(OrderStatus.ASSIGNED);
     }
 
-    public void complete() {
-        if (getStatus() == OrderStatus.ASSIGNED) {
-            setStatus(OrderStatus.COMPLETED);
+    public Result<Order, String> complete() {
+        if (getStatus() != OrderStatus.ASSIGNED) {
+            return Result.error("Order hasn't been assigned and therefore cannot be completed");
         }
+        setStatus(OrderStatus.COMPLETED);
+        return Result.success(this);
     }
 
     public UUID getId() {

@@ -38,7 +38,7 @@ public class Transport {
                 .orElseGet(() -> Result.error("Name " + name + " is incorrect."));
     }
 
-    public Location movePreferablyByX(Location from, Location to) {
+    public Location moveTowardPreferablyByX(Location from, Location to) {
         MoveResult movementByX = calculateOneStepWithReminder(from.getX(), to.getX(), speed);
         if (movementByX.unusedSteps() == 0) {
             return Location.create(movementByX.newPoint(), from.getY());
@@ -47,7 +47,7 @@ public class Transport {
         return Location.create(movementByX.newPoint(), movementByY.newPoint());
     }
 
-    public Location movePreferablyByY(Location from, Location to) {
+    public Location moveTowardPreferablyByY(Location from, Location to) {
         MoveResult movementByY = calculateOneStepWithReminder(from.getY(), to.getY(), speed);
         if (movementByY.unusedSteps() == 0) {
             return Location.create(from.getX(), movementByY.newPoint());

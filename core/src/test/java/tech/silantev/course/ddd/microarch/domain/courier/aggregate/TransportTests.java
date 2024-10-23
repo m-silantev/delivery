@@ -66,7 +66,7 @@ class TransportTests {
         Location to = Location.create(10, 10);
         Location expected = Location.create(from.getX() + transport.getSpeed(), from.getY());
         // when
-        Location location = transport.movePreferablyByX(from, to);
+        Location location = transport.moveTowardPreferablyByX(from, to);
         // then
         assertEquals(expected, location);
     }
@@ -79,7 +79,7 @@ class TransportTests {
         Location to = Location.create(10, 10);
         Location expected = Location.create(from.getX(), from.getY() + transport.getSpeed());
         // when
-        Location location = transport.movePreferablyByY(from, to);
+        Location location = transport.moveTowardPreferablyByY(from, to);
         // then
         assertEquals(expected, location);
     }
@@ -92,7 +92,7 @@ class TransportTests {
         Location to = Location.create(1, 1);
         Location expected = Location.create(from.getX() - transport.getSpeed(), from.getY());
         // when
-        Location location = transport.movePreferablyByX(from, to);
+        Location location = transport.moveTowardPreferablyByX(from, to);
         // then
         assertEquals(expected, location);
     }
@@ -105,7 +105,7 @@ class TransportTests {
         Location to = Location.create(1, 1);
         Location expected = Location.create(from.getX(), from.getY() - transport.getSpeed());
         // when
-        Location location = transport.movePreferablyByY(from, to);
+        Location location = transport.moveTowardPreferablyByY(from, to);
         // then
         assertEquals(expected, location);
     }
@@ -118,7 +118,7 @@ class TransportTests {
         Location to = Location.create(1, 10);
         Location expected = Location.create(from.getX(), from.getY() + transport.getSpeed());
         // when
-        Location location = transport.movePreferablyByX(from, to);
+        Location location = transport.moveTowardPreferablyByX(from, to);
         // then
         assertEquals(expected, location);
     }
@@ -131,7 +131,7 @@ class TransportTests {
         Location to = Location.create(10, 1);
         Location expected = Location.create(from.getX() + transport.getSpeed(), from.getY());
         // when
-        Location location = transport.movePreferablyByY(from, to);
+        Location location = transport.moveTowardPreferablyByY(from, to);
         // then
         assertEquals(expected, location);
     }

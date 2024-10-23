@@ -1,5 +1,6 @@
 package tech.silantev.course.ddd.microarch.domain.order.aggregate;
 
+import com.github.sviperll.result4j.Result;
 import org.junit.jupiter.api.Test;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Transport;
@@ -8,7 +9,9 @@ import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrderTests {
 
@@ -52,20 +55,22 @@ public class OrderTests {
         Order order = Order.create(UUID.randomUUID(), Location.createRandom());
         OrderStatus expected = order.getStatus();
         // when
-        order.complete();
+        Result<Order, String> result = order.complete();
         // then
+        assertTrue(result.isError());
         assertEquals(expected, order.getStatus());
     }
 
     @Test
-    public void whenOrderIsCompletedItShouldStatusCompleted() {
+    public void whenOrderIsCompletedItShouldHaveStatusCompleted() {
         // given
         Order order = Order.create(UUID.randomUUID(), Location.createRandom());
         Courier courier = Courier.create("anyString", Transport.BICYCLE, Location.createRandom());
         order.assignCourier(courier);
         // when
-        order.complete();
+        Result<Order, String> result = order.complete();
         // then
+        assertFalse(result.isError());
         assertEquals(OrderStatus.COMPLETED, order.getStatus());
     }
 }

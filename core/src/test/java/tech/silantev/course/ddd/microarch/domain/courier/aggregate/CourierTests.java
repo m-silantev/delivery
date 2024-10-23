@@ -1,5 +1,6 @@
 package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 
+import com.github.sviperll.result4j.Result;
 import org.junit.jupiter.api.Test;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
@@ -40,8 +41,9 @@ class CourierTests {
         // given
         Courier courier = Courier.create("anyString", Transport.BICYCLE, Location.createRandom());
         // when
-        courier.setBusy();
+        Result<Courier, String> result = courier.setBusy();
         // then
+        assertFalse(result.isError());
         assertEquals(CourierStatus.BUSY, courier.getStatus());
     }
 
@@ -50,8 +52,9 @@ class CourierTests {
         // given
         Courier courier = Courier.create("anyString", Transport.BICYCLE, Location.createRandom());
         // when
-        courier.setFree();
+        Result<Courier, String> result = courier.setFree();
         // then
+        assertFalse(result.isError());
         assertEquals(CourierStatus.FREE, courier.getStatus());
     }
 
