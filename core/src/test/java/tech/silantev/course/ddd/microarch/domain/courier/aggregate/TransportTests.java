@@ -4,14 +4,28 @@ import com.github.sviperll.result4j.Result;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.UUID;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TransportTests {
+
+    public static Stream<Transport> validTransports() {
+        return Transport.list().stream();
+    }
+
+    public static Stream<String> validTransportNames() {
+        return validTransports().map(Transport::getName);
+    }
+
+    public static Stream<String> invalidTransportNames() {
+        return Stream.generate(UUID::randomUUID).map(UUID::toString).limit(3);
+    }
 
     @Test
     public void twoTransportsAreEqualIfTheirIdsEqual() {
@@ -44,11 +58,81 @@ class TransportTests {
         assertTrue(result.isError());
     }
 
-    public static Stream<String> validTransportNames() {
-        return Transport.list().stream().map(Transport::name);
+    @ParameterizedTest
+    @MethodSource("validTransports")
+    public void movePreferablyByXMethodShouldChangeOnlyXCoordinateOnAStraightRoads(Transport transport) {
+        // given
+        Location from = Location.create(1, 1);
+        Location to = Location.create(10, 10);
+        Location expected = Location.create(from.getX() + transport.getSpeed(), from.getY());
+        // when
+        Location location = transport.moveTowardPreferablyByX(from, to);
+        // then
+        assertEquals(expected, location);
     }
 
-    public static Stream<String> invalidTransportNames() {
-        return Stream.generate(UUID::randomUUID).map(UUID::toString).limit(3);
+    @ParameterizedTest
+    @MethodSource("validTransports")
+    public void movePreferablyByYMethodShouldChangeOnlyYCoordinateOnAStraightRoads(Transport transport) {
+        // given
+        Location from = Location.create(1, 1);
+        Location to = Location.create(10, 10);
+        Location expected = Location.create(from.getX(), from.getY() + transport.getSpeed());
+        // when
+        Location location = transport.moveTowardPreferablyByY(from, to);
+        // then
+        assertEquals(expected, location);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validTransports")
+    public void movePreferablyByXMethodShouldChangeOnlyXCoordinateWhenMovingBackwardOnAStraightRoads(Transport transport) {
+        // given
+        Location from = Location.create(10, 10);
+        Location to = Location.create(1, 1);
+        Location expected = Location.create(from.getX() - transport.getSpeed(), from.getY());
+        // when
+        Location location = transport.moveTowardPreferablyByX(from, to);
+        // then
+        assertEquals(expected, location);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validTransports")
+    public void movePreferablyByYMethodShouldChangeOnlyYCoordinateWhenMovingBackwardOnAStraightRoads(Transport transport) {
+        // given
+        Location from = Location.create(10, 10);
+        Location to = Location.create(1, 1);
+        Location expected = Location.create(from.getX(), from.getY() - transport.getSpeed());
+        // when
+        Location location = transport.moveTowardPreferablyByY(from, to);
+        // then
+        assertEquals(expected, location);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validTransports")
+    public void movePreferablyByXMethodShouldChangeYCoordinateIfXIsOver(Transport transport) {
+        // given
+        Location from = Location.create(1, 1);
+        Location to = Location.create(1, 10);
+        Location expected = Location.create(from.getX(), from.getY() + transport.getSpeed());
+        // when
+        Location location = transport.moveTowardPreferablyByX(from, to);
+        // then
+        assertEquals(expected, location);
+    }
+
+    @ParameterizedTest
+    @MethodSource("validTransports")
+    public void movePreferablyByYMethodShouldChangeXCoordinateIfYIsOver(Transport transport) {
+        // given
+        Location from = Location.create(1, 1);
+        Location to = Location.create(10, 1);
+        Location expected = Location.create(from.getX() + transport.getSpeed(), from.getY());
+        // when
+        Location location = transport.moveTowardPreferablyByY(from, to);
+        // then
+        assertEquals(expected, location);
     }
 }
