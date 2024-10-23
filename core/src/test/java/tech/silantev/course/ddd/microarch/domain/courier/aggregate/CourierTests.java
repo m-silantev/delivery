@@ -51,10 +51,22 @@ class CourierTests {
     public void setFreeMethodShouldChangeStatusToFree() {
         // given
         Courier courier = Courier.create("anyString", Transport.BICYCLE, Location.createRandom());
+        courier.setBusy();
         // when
         Result<Courier, String> result = courier.setFree();
         // then
         assertFalse(result.isError());
+        assertEquals(CourierStatus.FREE, courier.getStatus());
+    }
+
+    @Test
+    public void courierIsProhibitedToChangeStatusFromFreeToFree() {
+        // given
+        Courier courier = Courier.create("anyString", Transport.BICYCLE, Location.createRandom());
+        // when
+        Result<Courier, String> result = courier.setFree();
+        // then
+        assertTrue(result.isError());
         assertEquals(CourierStatus.FREE, courier.getStatus());
     }
 
