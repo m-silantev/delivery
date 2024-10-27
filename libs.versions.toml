@@ -1,0 +1,11 @@
+[versions]
+#
+
+[libraries]
+spring-data-jdbc = { module = "org.springframework.data:spring-data-jdbc", version = "3.3.5" }
+
+[bundles]
+#
+
+[plugins]
+#

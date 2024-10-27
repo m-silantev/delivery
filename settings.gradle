@@ -2,3 +2,11 @@ rootProject.name = 'delivery'
 include(':api')
 include(':core')
 include(':infrastructure')
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            from(files("libs.versions.toml"))
+        }
+    }
+}
