@@ -26,10 +26,14 @@ public class Transport {
         return List.of(PEDESTRIAN, BICYCLE, CAR);
     }
 
-    public static Result<Transport, String> fromId(int id) {
+    public static Result<Transport, String> fromIdSafe(int id) {
         Optional<Transport> found = list().stream().filter(transport -> transport.getId() == id).findAny();
         return found.map(Result::<Transport, String>success)
                 .orElseGet(() -> Result.error("Id " + id + " is incorrect."));
+    }
+
+    public static Transport fromId(int id) {
+        return fromIdSafe(id).throwError(IllegalArgumentException::new);
     }
 
     public static Result<Transport, String> fromName(String name) {

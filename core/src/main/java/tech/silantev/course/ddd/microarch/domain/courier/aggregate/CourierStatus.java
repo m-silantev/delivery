@@ -22,10 +22,14 @@ public class CourierStatus {
         return List.of(FREE, BUSY);
     }
 
-    public static Result<CourierStatus, String> fromId(int id) {
+    public static Result<CourierStatus, String> fromIdSafe(int id) {
         Optional<CourierStatus> found = list().stream().filter(courierStatus -> courierStatus.id() == id).findAny();
         return found.map(Result::<CourierStatus, String>success)
                 .orElseGet(() -> Result.error("Id " + id + " is incorrect."));
+    }
+
+    public static CourierStatus fromId(int id) {
+        return fromIdSafe(id).throwError(IllegalArgumentException::new);
     }
 
     public static Result<CourierStatus, String> fromName(String name) {

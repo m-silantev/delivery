@@ -30,8 +30,8 @@ class TransportTests {
     @Test
     public void twoTransportsAreEqualIfTheirIdsEqual() {
         // given
-        Transport transportA = Transport.fromId(1).discardError().get();
-        Transport transportB = Transport.fromId(1).discardError().get();
+        Transport transportA = Transport.fromId(1);
+        Transport transportB = Transport.fromId(1);
         // when
         boolean equals = transportA.equals(transportB);
         // then

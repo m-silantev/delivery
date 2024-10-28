@@ -1,6 +1,7 @@
 package tech.silantev.course.ddd.microarch.domain.order.aggregate;
 
 import com.github.sviperll.result4j.Result;
+import lombok.Builder;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
@@ -13,6 +14,14 @@ public class Order {
     private OrderStatus status;
     private UUID courierId;
 
+    @Builder
+    private Order(UUID id, Location location, OrderStatus status, UUID courierId) {
+        this.id = id;
+        this.location = location;
+        this.status = status;
+        this.courierId = courierId;
+    }
+
     private Order(UUID id, Location location) {
         this.id = id;
         this.location = location;
@@ -22,6 +31,14 @@ public class Order {
         Order order = new Order(id, location);
         order.setStatus(OrderStatus.CREATED);
         return order;
+    }
+
+    private void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    private void setCourierId(UUID courierId) {
+        this.courierId = courierId;
     }
 
     public void assignCourier(Courier courier) {
@@ -49,15 +66,7 @@ public class Order {
         return status;
     }
 
-    private void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
     public UUID getCourierId() {
         return courierId;
-    }
-
-    private void setCourierId(UUID courierId) {
-        this.courierId = courierId;
     }
 }

@@ -1,10 +1,12 @@
 package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 
 import com.github.sviperll.result4j.Result;
+import lombok.Builder;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.UUID;
 
+@Builder
 public class Courier {
 
     private final UUID id;
