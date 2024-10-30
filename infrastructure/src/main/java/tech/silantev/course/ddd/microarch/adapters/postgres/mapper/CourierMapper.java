@@ -27,7 +27,7 @@ public interface CourierMapper {
         entity.name = courier.getName();
         entity.transportId = courier.getTransport().getId();
         entity.location = new LocationVO(courier.getLocation().getX(), courier.getLocation().getY());
-        entity.statusId = courier.getTransport().getId();
+        entity.statusId = courier.getStatus().getId();
         return entity;
     }
 }

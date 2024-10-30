@@ -1,17 +1,22 @@
 package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 
 import com.github.sviperll.result4j.Result;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.List;
 import java.util.Optional;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Transport {
 
     public static final Transport PEDESTRIAN = new Transport(1, "PEDESTRIAN", 1);
     public static final Transport BICYCLE = new Transport(2, "BICYCLE", 2);
     public static final Transport CAR = new Transport(3, "CAR", 3);
 
+    @EqualsAndHashCode.Include
     private final int id;
     private final String name;
     private final int speed;

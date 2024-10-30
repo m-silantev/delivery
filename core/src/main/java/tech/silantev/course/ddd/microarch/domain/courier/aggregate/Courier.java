@@ -2,13 +2,18 @@ package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 
 import com.github.sviperll.result4j.Result;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.UUID;
 
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Courier {
 
+    @EqualsAndHashCode.Include
     private final UUID id;
     private final String name;
     private final Transport transport;

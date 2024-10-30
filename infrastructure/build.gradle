@@ -9,5 +9,6 @@ dependencies {
     implementation libs.postgres.driver
     implementation libs.liquibase
 
-    annotationProcessor libs.mapstruct.processor
+    testImplementation libs.bundles.testcontainers
+    testImplementation libs.spring.boot.test
 }

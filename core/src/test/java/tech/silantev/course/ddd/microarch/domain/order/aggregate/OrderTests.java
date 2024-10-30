@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class OrderTests {
@@ -34,7 +33,7 @@ public class OrderTests {
         // when
         Order order = Order.create(id, location);
         // then
-        assertNull(order.getCourierId());
+        assertTrue(order.getCourierId().isPresent());
     }
 
     @Test
@@ -46,7 +45,7 @@ public class OrderTests {
         order.assignCourier(courier);
         // then
         assertEquals(OrderStatus.ASSIGNED, order.getStatus());
-        assertEquals(courier.getId(), order.getCourierId());
+        assertEquals(courier.getId(), order.getCourierId().get());
     }
 
     @Test

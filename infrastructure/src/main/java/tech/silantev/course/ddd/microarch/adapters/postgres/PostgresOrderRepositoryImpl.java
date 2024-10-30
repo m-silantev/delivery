@@ -26,6 +26,7 @@ public class PostgresOrderRepositoryImpl implements OrderRepository {
     public Result<Order, Exception> add(Order order) {
         try {
             OrderAggregate entity = OrderMapper.orderToEntity(order);
+            entity.create = true;
             OrderAggregate saved = repository.save(entity);
             return Result.success(OrderMapper.entityToOrder(saved));
         } catch (Exception e) {
@@ -35,7 +36,13 @@ public class PostgresOrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Result<Order, Exception> update(Order order) {
-        return add(order);
+        try {
+            OrderAggregate entity = OrderMapper.orderToEntity(order);
+            OrderAggregate saved = repository.save(entity);
+            return Result.success(OrderMapper.entityToOrder(saved));
+        } catch (Exception e) {
+            return Result.error(e);
+        }
     }
 
     @Override

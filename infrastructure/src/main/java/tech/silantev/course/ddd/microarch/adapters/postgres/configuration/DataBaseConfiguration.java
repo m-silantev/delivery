@@ -1,6 +1,5 @@
 package tech.silantev.course.ddd.microarch.adapters.postgres.configuration;
 
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
@@ -14,16 +13,6 @@ import javax.sql.DataSource;
 @Configuration
 @EnableJdbcRepositories(basePackages = "tech.silantev.course.ddd.microarch.adapters.postgres")
 public class DataBaseConfiguration {
-
-    @Bean
-    public DataSource dataSource() {
-        return DataSourceBuilder.create()
-                .url("jdbc:postgresql://localhost:5432/delivery")
-                .username("postgres")
-                .password("postgres")
-                .driverClassName("org.postgresql.Driver")
-                .build();
-    }
 
     @Bean
     public NamedParameterJdbcOperations operations(DataSource dataSource) {

@@ -26,6 +26,7 @@ public class PostgresCourierRepositoryImpl implements CourierRepository {
     public Result<Courier, Exception> add(Courier courier) {
         try {
             CourierAggregate entity = CourierMapper.courierToEntity(courier);
+            entity.create = true;
             CourierAggregate saved = repository.save(entity);
             return Result.success(CourierMapper.entityToCourier(saved));
         } catch (Exception e) {
@@ -35,7 +36,13 @@ public class PostgresCourierRepositoryImpl implements CourierRepository {
 
     @Override
     public Result<Courier, Exception> update(Courier courier) {
-        return add(courier);
+        try {
+            CourierAggregate entity = CourierMapper.courierToEntity(courier);
+            CourierAggregate saved = repository.save(entity);
+            return Result.success(CourierMapper.entityToCourier(saved));
+        } catch (Exception e) {
+            return Result.error(e);
+        }
     }
 
     @Override
@@ -51,7 +58,7 @@ public class PostgresCourierRepositoryImpl implements CourierRepository {
     @Override
     public Result<List<Courier>, Exception> getAllFree() {
         try {
-            List<Courier> allFree = repository.findAllByStatusId(CourierStatus.FREE.id())
+            List<Courier> allFree = repository.findAllByStatusId(CourierStatus.FREE.getId())
                     .stream().map(CourierMapper::entityToCourier).toList();
             return Result.success(allFree);
         } catch (Exception e) {

@@ -2,19 +2,25 @@ package tech.silantev.course.ddd.microarch.domain.order.aggregate;
 
 import com.github.sviperll.result4j.Result;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
+import java.util.Optional;
 import java.util.UUID;
 
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Order {
 
+    @EqualsAndHashCode.Include
     private final UUID id;
     private final Location location;
     private OrderStatus status;
     private UUID courierId;
 
-    @Builder
     private Order(UUID id, Location location, OrderStatus status, UUID courierId) {
         this.id = id;
         this.location = location;
@@ -66,7 +72,7 @@ public class Order {
         return status;
     }
 
-    public UUID getCourierId() {
-        return courierId;
+    public Optional<UUID> getCourierId() {
+        return Optional.ofNullable(courierId);
     }
 }

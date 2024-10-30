@@ -1,17 +1,21 @@
 package tech.silantev.course.ddd.microarch.domain.order.aggregate;
 
 import com.github.sviperll.result4j.Result;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class OrderStatus {
 
     public static final OrderStatus CREATED = new OrderStatus(1, "CREATED");
     public static final OrderStatus ASSIGNED = new OrderStatus(2, "ASSIGNED");
     public static final OrderStatus COMPLETED = new OrderStatus(3, "COMPLETED");
 
+    @EqualsAndHashCode.Include
     private final int id;
     private final String name;
 
@@ -50,22 +54,5 @@ public class OrderStatus {
 
     public String name() {
         return name;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
-        OrderStatus that = (OrderStatus) object;
-        return id == that.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
     }
 }

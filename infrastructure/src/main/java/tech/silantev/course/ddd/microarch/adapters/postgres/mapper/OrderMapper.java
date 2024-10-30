@@ -6,6 +6,7 @@ import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.OrderStatus;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderMapper {
@@ -15,7 +16,7 @@ public interface OrderMapper {
                 .id(UUID.fromString(entity.id))
                 .location(Location.create(entity.location.x, entity.location.y))
                 .status(OrderStatus.fromId(entity.statusId))
-                .courierId(UUID.fromString(entity.courierId))
+                .courierId(Optional.ofNullable(entity.courierId).map(UUID::fromString).orElse(null))
                 .build();
     }
 
@@ -24,7 +25,7 @@ public interface OrderMapper {
         entity.id = order.getId().toString();
         entity.location = new LocationVO(order.getLocation().getX(), order.getLocation().getY());
         entity.statusId = order.getStatus().id();
-        entity.courierId = order.getCourierId().toString();
+        entity.courierId = order.getCourierId().map(UUID::toString).orElse(null);
         return entity;
     }
 }
