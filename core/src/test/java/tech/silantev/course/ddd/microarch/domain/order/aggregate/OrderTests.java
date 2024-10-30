@@ -33,7 +33,7 @@ public class OrderTests {
         // when
         Order order = Order.create(id, location);
         // then
-        assertTrue(order.getCourierId().isPresent());
+        assertTrue(order.getCourierId().isEmpty());
     }
 
     @Test
