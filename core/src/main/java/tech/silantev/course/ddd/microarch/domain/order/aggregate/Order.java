@@ -1,17 +1,32 @@
 package tech.silantev.course.ddd.microarch.domain.order.aggregate;
 
 import com.github.sviperll.result4j.Result;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
+import java.util.Optional;
 import java.util.UUID;
 
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Order {
 
+    @EqualsAndHashCode.Include
     private final UUID id;
     private final Location location;
     private OrderStatus status;
     private UUID courierId;
+
+    private Order(UUID id, Location location, OrderStatus status, UUID courierId) {
+        this.id = id;
+        this.location = location;
+        this.status = status;
+        this.courierId = courierId;
+    }
 
     private Order(UUID id, Location location) {
         this.id = id;
@@ -22,6 +37,14 @@ public class Order {
         Order order = new Order(id, location);
         order.setStatus(OrderStatus.CREATED);
         return order;
+    }
+
+    private void setStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    private void setCourierId(UUID courierId) {
+        this.courierId = courierId;
     }
 
     public void assignCourier(Courier courier) {
@@ -49,15 +72,7 @@ public class Order {
         return status;
     }
 
-    private void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public UUID getCourierId() {
-        return courierId;
-    }
-
-    private void setCourierId(UUID courierId) {
-        this.courierId = courierId;
+    public Optional<UUID> getCourierId() {
+        return Optional.ofNullable(courierId);
     }
 }

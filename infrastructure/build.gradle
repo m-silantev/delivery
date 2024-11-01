@@ -1,3 +1,14 @@
+plugins {
+    alias(libs.plugins.lombok)
+}
+
 dependencies {
     implementation project(':core')
+    implementation libs.spring.boot.starter.data.jdbc
+    implementation libs.mapstruct
+    implementation libs.postgres.driver
+    implementation libs.liquibase
+
+    testImplementation libs.bundles.testcontainers
+    testImplementation libs.spring.boot.test
 }

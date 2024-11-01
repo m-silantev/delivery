@@ -1,17 +1,22 @@
 package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 
 import com.github.sviperll.result4j.Result;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.List;
 import java.util.Optional;
 
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString
 public class Transport {
 
     public static final Transport PEDESTRIAN = new Transport(1, "PEDESTRIAN", 1);
     public static final Transport BICYCLE = new Transport(2, "BICYCLE", 2);
     public static final Transport CAR = new Transport(3, "CAR", 3);
 
+    @EqualsAndHashCode.Include
     private final int id;
     private final String name;
     private final int speed;
@@ -26,10 +31,14 @@ public class Transport {
         return List.of(PEDESTRIAN, BICYCLE, CAR);
     }
 
-    public static Result<Transport, String> fromId(int id) {
+    public static Result<Transport, String> fromIdSafe(int id) {
         Optional<Transport> found = list().stream().filter(transport -> transport.getId() == id).findAny();
         return found.map(Result::<Transport, String>success)
                 .orElseGet(() -> Result.error("Id " + id + " is incorrect."));
+    }
+
+    public static Transport fromId(int id) {
+        return fromIdSafe(id).throwError(IllegalArgumentException::new);
     }
 
     public static Result<Transport, String> fromName(String name) {

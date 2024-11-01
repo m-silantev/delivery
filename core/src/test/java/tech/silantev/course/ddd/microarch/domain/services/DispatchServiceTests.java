@@ -11,7 +11,10 @@ import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DispatchServiceTests {
 
@@ -39,7 +42,7 @@ class DispatchServiceTests {
         Result<Order, String> result = dispatchService.dispatch(order, List.of(targetCourier));
         //then
         assertTrue(result.isError());
-        assertNotEquals(targetCourier.getId(), order.getCourierId());
+        assertNotEquals(targetCourier.getId(), order.getCourierId().get());
     }
 
     @Test
@@ -55,7 +58,7 @@ class DispatchServiceTests {
         Result<Order, String> result = dispatchService.dispatch(order, busyCouriers);
         //then
         assertTrue(result.isError());
-        assertNull(order.getCourierId());
+        assertTrue(order.getCourierId().isEmpty());
     }
 
     @Test
@@ -72,7 +75,7 @@ class DispatchServiceTests {
         //then
         assertFalse(result.isError());
         assertEquals(OrderStatus.ASSIGNED, orderInFourthQuarter.getStatus());
-        assertEquals(courierInFourthQuarter.getId(), orderInFourthQuarter.getCourierId());
+        assertEquals(courierInFourthQuarter.getId(), orderInFourthQuarter.getCourierId().get());
     }
 
     @Test
@@ -89,6 +92,6 @@ class DispatchServiceTests {
         //then
         assertFalse(result.isError());
         assertEquals(OrderStatus.ASSIGNED, order.getStatus());
-        assertEquals(carCourier.getId(), order.getCourierId());
+        assertEquals(carCourier.getId(), order.getCourierId().get());
     }
 }
