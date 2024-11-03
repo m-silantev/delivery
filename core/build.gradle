@@ -4,4 +4,6 @@ plugins {
 
 dependencies {
     implementation libs.pipelinr
+
+    testImplementation libs.bundles.mockito
 }
