@@ -1,3 +1,7 @@
 plugins {
     alias(libs.plugins.lombok)
 }
+
+dependencies {
+    implementation libs.pipelinr
+}

@@ -15,4 +15,6 @@ public interface CourierRepository {
     Result<Courier, Exception> getById(UUID id);
 
     Result<List<Courier>, Exception> getAllFree();
+
+    Result<List<Courier>, Exception> getAllBusy();
 }

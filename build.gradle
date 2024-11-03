@@ -19,7 +19,7 @@ subprojects {
     }
 
     dependencies {
-        implementation 'com.github.sviperll:result4j:1.0'
+        implementation libs.result4j
         testImplementation platform('org.junit:junit-bom:5.10.0')
         testImplementation 'org.junit.jupiter:junit-jupiter'
     }
