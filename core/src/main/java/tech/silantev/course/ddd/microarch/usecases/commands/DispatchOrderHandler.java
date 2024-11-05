@@ -2,6 +2,7 @@ package tech.silantev.course.ddd.microarch.usecases.commands;
 
 import an.awesome.pipelinr.Command;
 import com.github.sviperll.result4j.Result;
+import org.springframework.stereotype.Component;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.domain.services.DispatchService;
@@ -10,6 +11,7 @@ import tech.silantev.course.ddd.microarch.ports.OrderRepository;
 
 import java.util.List;
 
+@Component
 public class DispatchOrderHandler implements Command.Handler<DispatchOrderCommand, Result<Order, String>> {
 
     private final OrderRepository orderRepository;

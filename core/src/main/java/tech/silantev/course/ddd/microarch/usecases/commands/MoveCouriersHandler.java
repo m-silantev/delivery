@@ -2,6 +2,8 @@ package tech.silantev.course.ddd.microarch.usecases.commands;
 
 import an.awesome.pipelinr.Command;
 import com.github.sviperll.result4j.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.ports.CourierRepository;
@@ -10,11 +12,13 @@ import tech.silantev.course.ddd.microarch.ports.OrderRepository;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class MoveCouriersHandler implements Command.Handler<MoveCouriersCommand, Result<Void, String>> {
 
     private final OrderRepository orderRepository;
     private final CourierRepository courierRepository;
 
+    @Autowired
     public MoveCouriersHandler(OrderRepository orderRepository, CourierRepository courierRepository) {
         this.orderRepository = orderRepository;
         this.courierRepository = courierRepository;
