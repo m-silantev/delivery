@@ -65,4 +65,15 @@ public class PostgresCourierRepositoryImpl implements CourierRepository {
             return Result.error(e);
         }
     }
+
+    @Override
+    public Result<List<Courier>, Exception> getAllBusy() {
+        try {
+            List<Courier> allFree = repository.findAllByStatusId(CourierStatus.BUSY.getId())
+                    .stream().map(CourierMapper::entityToCourier).toList();
+            return Result.success(allFree);
+        } catch (Exception e) {
+            return Result.error(e);
+        }
+    }
 }

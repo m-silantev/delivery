@@ -9,7 +9,7 @@ import java.util.List;
 public interface DispatchService {
     /**
      * Выбирает наиболее подходящего курьера из списка и назначает заказ на него.
-     * @return успех/неуспех
+     * @return в случае успеха возвращает результат со ссылкой на выбранного курьера, иначе сообщение об ошибке.
      */
-    Result<Order, String> dispatch(Order order, List<Courier> couriers);
+    Result<Courier, String> dispatch(Order order, List<Courier> couriers);
 }

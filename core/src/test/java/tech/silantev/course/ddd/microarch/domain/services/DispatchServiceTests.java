@@ -39,7 +39,7 @@ class DispatchServiceTests {
         order.assignCourier(createCarCourier(Location.createRandom()));
         Courier targetCourier = Courier.create("targetCourier", Transport.BICYCLE, Location.createRandom());
         // when
-        Result<Order, String> result = dispatchService.dispatch(order, List.of(targetCourier));
+        Result<Courier, String> result = dispatchService.dispatch(order, List.of(targetCourier));
         //then
         assertTrue(result.isError());
         assertNotEquals(targetCourier.getId(), order.getCourierId().get());
@@ -55,7 +55,7 @@ class DispatchServiceTests {
         courier2.setBusy();
         List<Courier> busyCouriers = List.of(courier1, courier2);
         // when
-        Result<Order, String> result = dispatchService.dispatch(order, busyCouriers);
+        Result<Courier, String> result = dispatchService.dispatch(order, busyCouriers);
         //then
         assertTrue(result.isError());
         assertTrue(order.getCourierId().isEmpty());
@@ -71,7 +71,7 @@ class DispatchServiceTests {
         Courier courierInFourthQuarter = createCarCourier(Location.create(10, 10));
         List<Courier> couriers = List.of(courierInFirstQuarter, courierInSecondQuarter, courierInThirdQuarter, courierInFourthQuarter);
         // when
-        Result<Order, String> result = dispatchService.dispatch(orderInFourthQuarter, couriers);
+        Result<Courier, String> result = dispatchService.dispatch(orderInFourthQuarter, couriers);
         //then
         assertFalse(result.isError());
         assertEquals(OrderStatus.ASSIGNED, orderInFourthQuarter.getStatus());
@@ -88,7 +88,7 @@ class DispatchServiceTests {
         Courier carCourier = createCarCourier(Location.create(1, 1));
         List<Courier> couriers = List.of(pedestrianCourier, carCourier, bicycleCourier);
         // when
-        Result<Order, String> result = dispatchService.dispatch(order, couriers);
+        Result<Courier, String> result = dispatchService.dispatch(order, couriers);
         //then
         assertFalse(result.isError());
         assertEquals(OrderStatus.ASSIGNED, order.getStatus());
