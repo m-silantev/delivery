@@ -1,3 +1,54 @@
+plugins {
+    alias(libs.plugins.openapi.generator)
+}
+
 dependencies {
-    implementation project(':core')
+    runtimeOnly libs.openapi.springdoc
+
+    compileOnly project(':core')
+    compileOnly libs.spring.boot.starter.web
+    compileOnly libs.spring.boot.starter.validation
+    compileOnly libs.swagger.annotations
+}
+
+def openapiOutputDirectory = "${layout.buildDirectory.asFile.get()}/generated/"
+def openapiContract = "$projectDir/contract/http/v1/openapi.yml"
+def openapiPackage = "tech.silantev.course.ddd.microarch.adapters.http"
+
+openApiGenerate {
+    generatorName.set("spring")
+    inputSpec.set(openapiContract)
+    outputDir.set(openapiOutputDirectory)
+    apiPackage.set("${openapiPackage}.controllers")
+    modelPackage.set("${openapiPackage}.models")
+    configOptions = [
+            dateLibrary            : "java8",
+            hideGenerationTimestamp: "true",
+            interfaceOnly          : "true",
+            skipDefaultInterface   : "true",
+            generateSupportingFiles: "false",
+            useTags                : "true",
+            openApiNullable        : "false",
+            useBeanValidation      : "false",
+            useSpringBoot3         : "true"
+    ]
+    globalProperties = [
+            apiDocs                : "false",
+            modelDocs              : "false",
+            apiTests               : "false",
+            modelTests             : "false",
+            generateSupportingFiles: "false"
+    ]
+}
+
+compileJava {
+    dependsOn 'openApiGenerate'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir "${openapiOutputDirectory}/src/main/java"
+        }
+    }
 }
