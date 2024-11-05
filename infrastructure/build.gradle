@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation project(':core')
+    compileOnly project(':core')
     implementation libs.spring.boot.starter.data.jdbc
     implementation libs.postgres.driver
     implementation libs.liquibase
