@@ -9,8 +9,10 @@ import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.ports.CourierRepository;
 import tech.silantev.course.ddd.microarch.ports.OrderRepository;
+import tech.silantev.course.ddd.microarch.usecases.UseCaseException;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Slf4j
 @Component
@@ -27,49 +29,29 @@ public class MoveCouriersHandler implements Command.Handler<MoveCouriersCommand,
 
     @Override
     public Result<Void, String> handle(MoveCouriersCommand command) {
-        Result<List<Order>, Exception> resultAllAssignedOrders = orderRepository.getAllAssigned();
-        if (resultAllAssignedOrders.isError()) {
-            return resultAllAssignedOrders.mapError(Exception::getMessage).map(orders -> null);
-        }
-        for (Order order : resultAllAssignedOrders.discardError().get()) {
-            if (order.getCourierId().isEmpty()) {
-                String message = "Order with ASSIGNED status and no courierId set was found, " + order;
-                log.warn(message);
-                return Result.error(message);
-            }
-            Result<Courier, Exception> resultCourier = courierRepository.getById(order.getCourierId().get());
-            if (resultCourier.isError()) {
-                return resultCourier.mapError(exception -> {
-                    log.error(exception.getMessage());
-                    return exception.getMessage();
-                }).map(courier -> null);
-            }
-            Courier courier = resultCourier.discardError().get();
-            if (courier.getDistanceTo(order.getLocation()) != 0) {
-                courier.makeOneStepTo(order.getLocation());
-                Result<Courier, Exception> resultUpdateCourier = courierRepository.update(courier);
-                if (resultUpdateCourier.isError()) {
-                    return resultUpdateCourier.mapError(exception -> {
-                        log.error(exception.getMessage());
-                        return exception.getMessage();
-                    }).map(_courier -> null);
+        try {
+            List<Order> orders = orderRepository.getAllAssigned().throwError(Function.identity());
+            for (Order order : orders) {
+                if (order.getCourierId().isEmpty()) {
+                    throw new UseCaseException("Order in ASSIGNED status and no courierId set was found, " + order);
                 }
-                log.info("Courier {} made a step forward order location", courier);
-                continue;
-            } // else complete order
-            Result<Order, String> resultOfCompleteOrder = order.complete();
-            if (resultOfCompleteOrder.isError()) {
-                return resultOfCompleteOrder.mapError(message -> {
-                    log.error(message);
-                    return message;
-                }).map(_order -> null);
+                Courier courier = courierRepository.getById(order.getCourierId().get()).throwError(Function.identity());
+                if (courier.getDistanceTo(order.getLocation()) != 0) {
+                    courier.makeOneStepTo(order.getLocation());
+                    courierRepository.update(courier).throwError(Function.identity());
+                    log.info("Courier {} made a step forward order location", courier);
+                    continue;
+                } // else complete order
+                order.complete().throwError(UseCaseException::new);
+                courier.setFree().throwError(UseCaseException::new);
+                orderRepository.update(order).throwError(Function.identity());
+                courierRepository.update(courier).throwError(Function.identity());
+                log.info("Courier {} complete an order {}", courier, order);
             }
-            Result<Order, Exception> resultUpdate = orderRepository.update(order);
-            if (resultUpdate.isError()) {
-//                log.error();
-            }
-            courier.setFree();
+            return Result.success(null);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            return Result.error(e.getMessage());
         }
-        return Result.success(null);
     }
 }

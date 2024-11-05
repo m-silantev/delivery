@@ -23,10 +23,11 @@ dependencyResolutionManagement {
             version('openapi-springdoc-version', '2.6.0')
 
             // libraries
+            library('spring-boot-core', 'org.springframework.boot', 'spring-boot').versionRef('spring-boot-version')
             library('spring-boot-starter-web', 'org.springframework.boot', 'spring-boot-starter-web').versionRef('spring-boot-version')
             library('spring-boot-starter-data-jdbc', 'org.springframework.boot', 'spring-boot-starter-data-jdbc').versionRef('spring-boot-version')
             library('spring-boot-starter-validation', 'org.springframework.boot', 'spring-boot-starter-validation').versionRef('spring-boot-version')
-            library('spring-boot-core', 'org.springframework.boot', 'spring-boot').versionRef('spring-boot-version')
+            library('spring-boot-starter-logging', 'org.springframework.boot', 'spring-boot-starter-logging').versionRef('spring-boot-version')
             library('spring-boot-autoconfigure', 'org.springframework.boot', 'spring-boot-autoconfigure').versionRef('spring-boot-version')
             library('mapstruct', 'org.mapstruct', 'mapstruct').versionRef('mapstruct-version')
             library('mapstruct-processor', 'org.mapstruct', 'mapstruct-processor').versionRef('mapstruct-version')
