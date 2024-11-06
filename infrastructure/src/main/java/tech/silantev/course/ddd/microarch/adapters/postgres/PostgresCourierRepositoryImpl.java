@@ -9,6 +9,7 @@ import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.CourierStatus;
 import tech.silantev.course.ddd.microarch.ports.CourierRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +51,19 @@ public class PostgresCourierRepositoryImpl implements CourierRepository {
         try {
             CourierAggregate entity = repository.findById(id.toString()).get();
             return Result.success(CourierMapper.entityToCourier(entity));
+        } catch (Exception e) {
+            return Result.error(e);
+        }
+    }
+
+    @Override
+    public Result<List<Courier>, Exception> getAll() {
+        try {
+            List<Courier> couriers = new ArrayList<>();
+            for (CourierAggregate courier : repository.findAll()) {
+                couriers.add(CourierMapper.entityToCourier(courier));
+            }
+            return Result.success(couriers);
         } catch (Exception e) {
             return Result.error(e);
         }

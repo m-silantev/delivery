@@ -20,6 +20,9 @@ subprojects {
 
     dependencies {
         implementation libs.result4j
+        implementation libs.pipelinr
+        implementation libs.spring.boot.starter.logging
+
         testImplementation platform('org.junit:junit-bom:5.10.0')
         testImplementation 'org.junit.jupiter:junit-jupiter'
     }

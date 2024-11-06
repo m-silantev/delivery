@@ -3,12 +3,14 @@ package tech.silantev.course.ddd.microarch.domain.courier.aggregate;
 import com.github.sviperll.result4j.Result;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
 import java.util.UUID;
 
 @Builder
+@Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 public class Courier {
@@ -77,25 +79,5 @@ public class Courier {
 
     private void setLocation(Location location) {
         this.location = location;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public CourierStatus getStatus() {
-        return status;
-    }
-
-    public Transport getTransport() {
-        return transport;
     }
 }

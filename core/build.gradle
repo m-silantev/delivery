@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation libs.pipelinr
+    compileOnly libs.spring.boot.core
 
     testImplementation libs.bundles.mockito
 }

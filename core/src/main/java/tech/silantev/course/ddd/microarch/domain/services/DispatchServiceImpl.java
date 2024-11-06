@@ -1,6 +1,7 @@
 package tech.silantev.course.ddd.microarch.domain.services;
 
 import com.github.sviperll.result4j.Result;
+import org.springframework.stereotype.Component;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.CourierStatus;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class DispatchServiceImpl implements DispatchService {
 
     @Override
