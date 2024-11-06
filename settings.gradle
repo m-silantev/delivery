@@ -18,10 +18,16 @@ dependencyResolutionManagement {
             version('result4j-version', '1.0')
             version('pipelinr-version', '0.9')
             version('mockito-version', '5.14.2')
+            version('openapi-generator-version', '7.8.0')
+            version('swagger-annotations-version', '2.2.25')
+            version('openapi-springdoc-version', '2.6.0')
 
             // libraries
-            library('spring-boot-starter-data-jdbc', 'org.springframework.boot', 'spring-boot-starter-data-jdbc').versionRef('spring-boot-version')
             library('spring-boot-core', 'org.springframework.boot', 'spring-boot').versionRef('spring-boot-version')
+            library('spring-boot-starter-web', 'org.springframework.boot', 'spring-boot-starter-web').versionRef('spring-boot-version')
+            library('spring-boot-starter-data-jdbc', 'org.springframework.boot', 'spring-boot-starter-data-jdbc').versionRef('spring-boot-version')
+            library('spring-boot-starter-validation', 'org.springframework.boot', 'spring-boot-starter-validation').versionRef('spring-boot-version')
+            library('spring-boot-starter-logging', 'org.springframework.boot', 'spring-boot-starter-logging').versionRef('spring-boot-version')
             library('spring-boot-autoconfigure', 'org.springframework.boot', 'spring-boot-autoconfigure').versionRef('spring-boot-version')
             library('mapstruct', 'org.mapstruct', 'mapstruct').versionRef('mapstruct-version')
             library('mapstruct-processor', 'org.mapstruct', 'mapstruct-processor').versionRef('mapstruct-version')
@@ -29,7 +35,10 @@ dependencyResolutionManagement {
             library('liquibase', 'org.liquibase', 'liquibase-core').versionRef('liquibase-version')
             library('result4j', 'com.github.sviperll', 'result4j').versionRef('result4j-version')
             library('pipelinr', 'net.sizovs', 'pipelinr').versionRef('pipelinr-version')
+            library('swagger-annotations', 'io.swagger.core.v3', 'swagger-annotations').versionRef('swagger-annotations-version')
+            library('openapi-springdoc', 'org.springdoc', 'springdoc-openapi-starter-webmvc-ui').versionRef('openapi-springdoc-version')
 
+            // test libraries
             library('spring-boot-test', 'org.springframework.boot', 'spring-boot-starter-test').versionRef('spring-boot-version')
             library('mockito-core', 'org.mockito', 'mockito-core').versionRef('mockito-version')
             library('mockito-junit', 'org.mockito', 'mockito-junit-jupiter').versionRef('mockito-version')
@@ -39,10 +48,10 @@ dependencyResolutionManagement {
             library('testcontainers-postgres', 'org.testcontainers', 'postgresql').versionRef('testcontainers-version')
             bundle('testcontainers', ['testcontainers-core', 'testcontainers-junit', 'testcontainers-postgres'])
 
-
             // plugins
             plugin('spring-boot', 'org.springframework.boot').versionRef('spring-boot-version')
             plugin('lombok', 'io.freefair.lombok').versionRef('lombok-version')
+            plugin('openapi-generator', 'org.openapi.generator').versionRef('openapi-generator-version')
         }
     }
 }

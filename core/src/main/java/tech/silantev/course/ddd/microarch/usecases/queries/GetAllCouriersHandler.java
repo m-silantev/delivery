@@ -10,18 +10,18 @@ import tech.silantev.course.ddd.microarch.ports.CourierRepository;
 import java.util.List;
 
 @Component
-public class GetAllBusyCouriersHandler implements Command.Handler<GetAllBusyCouriersQuery, Result<List<Courier>, String>> {
+public class GetAllCouriersHandler implements Command.Handler<GetAllCouriersQuery, Result<List<Courier>, String>> {
 
     private final CourierRepository courierRepository;
 
     @Autowired
-    public GetAllBusyCouriersHandler(CourierRepository courierRepository) {
+    public GetAllCouriersHandler(CourierRepository courierRepository) {
         this.courierRepository = courierRepository;
     }
 
     @Override
-    public Result<List<Courier>, String> handle(GetAllBusyCouriersQuery command) {
-        Result<List<Courier>, Exception> result = courierRepository.getAllBusy();
+    public Result<List<Courier>, String> handle(GetAllCouriersQuery command) {
+        Result<List<Courier>, Exception> result = courierRepository.getAll();
         return result.mapError(Exception::getMessage);
     }
 }
