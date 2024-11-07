@@ -7,6 +7,7 @@ import lombok.ToString;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,8 +30,8 @@ public class Order {
     }
 
     private Order(UUID id, Location location) {
-        this.id = id;
-        this.location = location;
+        this.id = Objects.requireNonNull(id, "id is required, but null");
+        this.location = Objects.requireNonNull(location, "location is required, but null");
     }
 
     public static Order create(UUID id, Location location) {

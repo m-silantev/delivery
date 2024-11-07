@@ -7,29 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
 import tech.silantev.course.ddd.microarch.domain.sharedkernel.Location;
+import tech.silantev.course.ddd.microarch.ports.GeoService;
 import tech.silantev.course.ddd.microarch.ports.OrderRepository;
 
 import java.util.UUID;
+import java.util.function.Function;
 
 @Slf4j
 @Component
 public class CreateOrderHandler implements Command.Handler<CreateOrderCommand, Result<Order, String>> {
 
     private final OrderRepository orderRepository;
+    private final GeoService geoService;
 
     @Autowired
-    public CreateOrderHandler(OrderRepository orderRepository) {
+    public CreateOrderHandler(OrderRepository orderRepository, GeoService geoService) {
         this.orderRepository = orderRepository;
+        this.geoService = geoService;
     }
 
     @Override
     public Result<Order, String> handle(CreateOrderCommand command) {
         try {
             UUID basketId = command.basketId();
-            // Location location = geoService.getLocation(command.street());
-            Location location = Location.createRandom();
+            Location location = geoService.getLocation(command.street()).throwError(Function.identity());
             Order order = Order.create(basketId, location);
-            orderRepository.add(order);
+            orderRepository.add(order).throwError(Function.identity());
             log.info("Order created successfully, {}", order);
             return Result.success(order);
         } catch (Exception e) {
