@@ -31,7 +31,7 @@ public class GetAllCreatedAndAssignedOrdersHandler implements Command.Handler<Ge
         if (resultAssignedOrders.isError()) {
             return resultAssignedOrders.mapError(Exception::getMessage);
         }
-        List<Order> combination = Stream.of(resultCreatedOrders.discardError().get(), resultCreatedOrders.discardError().get())
+        List<Order> combination = Stream.of(resultCreatedOrders.discardError().get(), resultAssignedOrders.discardError().get())
                 .flatMap(Collection::stream)
                 .distinct()
                 .toList();
