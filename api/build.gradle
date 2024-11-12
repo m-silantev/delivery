@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.openapi.generator)
+    alias(libs.plugins.protobuf)
+    alias(libs.plugins.lombok)
 }
 
 dependencies {
@@ -8,6 +10,10 @@ dependencies {
     compileOnly project(':core')
     compileOnly libs.spring.boot.starter.web
     compileOnly libs.spring.boot.starter.validation
+    compileOnly libs.protobuf.java
+    compileOnly libs.protobuf.java.util
+    compileOnly libs.spring.kafka
+    compileOnly libs.jackson.databind
     compileOnly libs.swagger.annotations
 }
 
@@ -44,6 +50,25 @@ openApiGenerate {
 compileJava {
     dependsOn 'openApiGenerate'
 }
+
+protobuf {
+    protoc {
+        artifact = "${libs.protobuf.compiler.get()}"
+    }
+    plugins {
+        grpc {
+            artifact = "${libs.protobuf.generator.get()}"
+        }
+    }
+    generateProtoTasks {
+        ofSourceSet('main').configureEach {
+            plugins {
+                grpc { }
+            }
+        }
+    }
+}
+
 
 sourceSets {
     main {

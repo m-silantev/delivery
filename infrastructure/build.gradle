@@ -1,17 +1,16 @@
 plugins {
     alias(libs.plugins.lombok)
-    id "com.google.protobuf" version "0.9.4"
+    alias(libs.plugins.protobuf)
 }
 
 dependencies {
     compileOnly project(':core')
-    implementation libs.spring.boot.starter.data.jdbc
-    implementation libs.postgres.driver
-    implementation libs.liquibase
-
-    implementation 'com.google.protobuf:protobuf-java:4.28.3'
-    implementation("net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE")
-    implementation 'javax.annotation:javax.annotation-api:1.3.1'
+    compileOnly libs.spring.boot.starter.data.jdbc
+    compileOnly libs.postgres.driver
+    compileOnly libs.liquibase
+    compileOnly libs.protobuf.java
+    compileOnly libs.spring.boot.starter.jrpc.client
+    compileOnly libs.javax.annotation
 
     testImplementation project(':core')
     testImplementation libs.bundles.testcontainers
@@ -21,14 +20,14 @@ dependencies {
 protobuf {
     protoc {
         // The artifact spec for the Protobuf Compiler
-        artifact = 'com.google.protobuf:protoc:4.28.3'
+        artifact = "${libs.protobuf.compiler.get()}"
     }
     plugins {
         // Optional: an artifact spec for a protoc plugin, with "grpc" as
         // the identifier, which can be referred to in the "plugins"
         // container of the "generateProtoTasks" closure.
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.68.1'
+            artifact = "${libs.protobuf.generator.get()}"
         }
     }
     generateProtoTasks {

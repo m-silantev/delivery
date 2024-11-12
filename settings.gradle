@@ -10,6 +10,8 @@ dependencyResolutionManagement {
             // versions
             version('spring-boot-version', '3.3.5')
             version('spring-jdbc-version', '6.1.14')
+            version('spring-jrpc-client-version', '3.1.0.RELEASE')
+            version('spring-kafka-version', '3.2.4')
             version('mapstruct-version', '1.6.2')
             version('postgres-driver-version', '42.7.4')
             version('liquibase-version', '4.29.2')
@@ -21,6 +23,11 @@ dependencyResolutionManagement {
             version('openapi-generator-version', '7.8.0')
             version('swagger-annotations-version', '2.2.25')
             version('openapi-springdoc-version', '2.6.0')
+            version('protobuf-version', '4.28.3')
+            version('protobuf-plugin-version', '0.9.4')
+            version('protobuf-generator-version', '1.68.1')
+            version('javax-annotation-version', '1.3.1')
+            version('jackson-databind-version', '2.18.1')
 
             // libraries
             library('spring-boot-core', 'org.springframework.boot', 'spring-boot').versionRef('spring-boot-version')
@@ -37,6 +44,14 @@ dependencyResolutionManagement {
             library('pipelinr', 'net.sizovs', 'pipelinr').versionRef('pipelinr-version')
             library('swagger-annotations', 'io.swagger.core.v3', 'swagger-annotations').versionRef('swagger-annotations-version')
             library('openapi-springdoc', 'org.springdoc', 'springdoc-openapi-starter-webmvc-ui').versionRef('openapi-springdoc-version')
+            library('spring-kafka', 'org.springframework.kafka', 'spring-kafka').versionRef('spring-kafka-version')
+            library('protobuf-java', 'com.google.protobuf', 'protobuf-java').versionRef('protobuf-version')
+            library('protobuf-java-util', 'com.google.protobuf', 'protobuf-java-util').versionRef('protobuf-version')
+            library('protobuf-compiler', 'com.google.protobuf', 'protoc').versionRef('protobuf-version')
+            library('protobuf-generator', 'io.grpc', 'protoc-gen-grpc-java').versionRef('protobuf-generator-version')
+            library('spring-boot-starter-jrpc-client', 'net.devh', 'grpc-client-spring-boot-starter').versionRef('spring-jrpc-client-version')
+            library('javax-annotation', 'javax.annotation', 'javax.annotation-api').versionRef('javax-annotation-version')
+            library('jackson-databind', 'com.fasterxml.jackson.core', 'jackson-databind').versionRef('jackson-databind-version')
 
             // test libraries
             library('spring-boot-test', 'org.springframework.boot', 'spring-boot-starter-test').versionRef('spring-boot-version')
@@ -52,6 +67,7 @@ dependencyResolutionManagement {
             plugin('spring-boot', 'org.springframework.boot').versionRef('spring-boot-version')
             plugin('lombok', 'io.freefair.lombok').versionRef('lombok-version')
             plugin('openapi-generator', 'org.openapi.generator').versionRef('openapi-generator-version')
+            plugin('protobuf', 'com.google.protobuf').versionRef('protobuf-plugin-version')
         }
     }
 }
