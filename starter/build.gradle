@@ -7,4 +7,12 @@ dependencies {
     implementation project(':core')
     implementation project(':infrastructure')
     implementation libs.spring.boot.starter.web
+    implementation libs.spring.kafka
+    implementation libs.spring.boot.starter.data.jdbc
+    implementation libs.postgres.driver
+    implementation libs.liquibase
+    implementation libs.protobuf.java
+    implementation libs.protobuf.java.util
+    implementation libs.spring.boot.starter.jrpc.client
+    implementation libs.jackson.databind
 }

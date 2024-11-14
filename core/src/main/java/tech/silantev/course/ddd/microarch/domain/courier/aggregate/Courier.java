@@ -52,7 +52,7 @@ public class Courier {
     }
 
     public int getDistanceTo(Location location) {
-        return location.distanceBetween(location);
+        return this.location.distanceBetween(location);
     }
 
     public void makeOneStepTo(Location orderLocation) {
