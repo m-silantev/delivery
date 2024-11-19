@@ -15,6 +15,10 @@ dependencies {
     testImplementation project(':core')
     testImplementation libs.bundles.testcontainers
     testImplementation libs.spring.boot.test
+    testImplementation libs.spring.boot.starter.data.jdbc
+    testImplementation libs.postgres.driver
+    testImplementation libs.liquibase
+    testImplementation libs.spring.boot.starter.jrpc.client
 }
 
 protobuf {
