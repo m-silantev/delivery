@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "tech.silantev.course.ddd.microarch.adapters.kafka";
+option java_multiple_files = true;
+
+enum OrderStatus {
+  None = 0;
+  Created = 1;
+  Assigned = 2;
+  Completed = 3;
+}
+
+message OrderStatusChangedIntegrationEvent {
+  string orderId = 1;
+  OrderStatus orderStatus = 2;
+}

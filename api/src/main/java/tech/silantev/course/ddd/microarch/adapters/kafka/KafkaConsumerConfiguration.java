@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
 @Configuration
-public class KafkaConfiguration {
+public class KafkaConsumerConfiguration {
+
+    static final String TOPIC_NAME = "basket.confirmed";
 
     @Bean
-    public NewTopic topic() {
-        return TopicBuilder.name("basket.confirmed")
+    public NewTopic basketConfirmedTopic() {
+        return TopicBuilder.name(TOPIC_NAME)
                 .partitions(1)
                 .replicas(1)
                 .build();

@@ -11,6 +11,8 @@ dependencies {
     compileOnly libs.protobuf.java
     compileOnly libs.spring.boot.starter.jrpc.client
     compileOnly libs.javax.annotation
+    compileOnly libs.spring.kafka
+    compileOnly libs.protobuf.java.util
 
     testImplementation project(':core')
     testImplementation libs.bundles.testcontainers
@@ -19,6 +21,7 @@ dependencies {
     testImplementation libs.postgres.driver
     testImplementation libs.liquibase
     testImplementation libs.spring.boot.starter.jrpc.client
+    testImplementation libs.spring.kafka
 }
 
 protobuf {

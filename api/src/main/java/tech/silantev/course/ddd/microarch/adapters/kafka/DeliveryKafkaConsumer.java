@@ -10,6 +10,8 @@ import tech.silantev.course.ddd.microarch.usecases.commands.CreateOrderCommand;
 
 import java.util.UUID;
 
+import static tech.silantev.course.ddd.microarch.adapters.kafka.KafkaConsumerConfiguration.TOPIC_NAME;
+
 @Slf4j
 @Component
 public class DeliveryKafkaConsumer {
@@ -21,7 +23,7 @@ public class DeliveryKafkaConsumer {
         this.pipeline = pipeline;
     }
 
-    @KafkaListener(groupId = "group-id-1", topics = "basket.confirmed")
+    @KafkaListener(groupId = "group-id-1", topics = TOPIC_NAME)
     public void listen(String json) {
         try {
             BasketConfirmedIntegrationEvent.Builder builder = BasketConfirmedIntegrationEvent.newBuilder();
