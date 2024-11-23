@@ -1,12 +1,14 @@
 package tech.silantev.course.ddd.microarch.usecases.commands;
 
 import an.awesome.pipelinr.Command;
+import an.awesome.pipelinr.Pipeline;
 import com.github.sviperll.result4j.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.silantev.course.ddd.microarch.domain.courier.aggregate.Courier;
 import tech.silantev.course.ddd.microarch.domain.order.aggregate.Order;
+import tech.silantev.course.ddd.microarch.domain.order.aggregate.events.OrderCompletedEvent;
 import tech.silantev.course.ddd.microarch.ports.CourierRepository;
 import tech.silantev.course.ddd.microarch.ports.OrderRepository;
 import tech.silantev.course.ddd.microarch.usecases.UseCaseException;
@@ -20,11 +22,13 @@ public class MoveCouriersHandler implements Command.Handler<MoveCouriersCommand,
 
     private final OrderRepository orderRepository;
     private final CourierRepository courierRepository;
+    private final Pipeline pipeline;
 
     @Autowired
-    public MoveCouriersHandler(OrderRepository orderRepository, CourierRepository courierRepository) {
+    public MoveCouriersHandler(OrderRepository orderRepository, CourierRepository courierRepository, Pipeline pipeline) {
         this.orderRepository = orderRepository;
         this.courierRepository = courierRepository;
+        this.pipeline = pipeline;
     }
 
     @Override
@@ -46,6 +50,7 @@ public class MoveCouriersHandler implements Command.Handler<MoveCouriersCommand,
                 courier.setFree().throwError(UseCaseException::new);
                 orderRepository.update(order).throwError(Function.identity());
                 courierRepository.update(courier).throwError(Function.identity());
+                pipeline.send(new OrderCompletedEvent(order.getId()));
                 log.info("Courier {} complete an order {}", courier, order);
             }
             return Result.success(null);
